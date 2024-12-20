@@ -17,14 +17,11 @@ pipeline{
                 }
             }
         }
-        stage("Push to dockerhub") {
-            steps {
+        stage("Push to dockerhub"){
+            steps{
                 echo "Pushing to dockerhub"
-                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubpass", usernameVariable: "dockerHubUser")]) {
-                    sh '''
-                    echo ${dockerHubpass} | docker login -u ${dockerHubUser} --password-stdin
-                    '''
-                }
+                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubpass",usernameVariable:"dockerHubUser")])
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubpass}"
             }
         }
     }
