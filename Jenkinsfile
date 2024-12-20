@@ -12,10 +12,15 @@ pipeline{
             steps {
                 echo "Building the Docker image"
                 script {
-                    // Ensure Docker is installed and available
-                    sh 'docker --version' // Optional, check Docker version
-                    sh 'docker build -t my_notes_app .' // Build the Docker image
+                    sh 'docker --version' 
+                    sh 'docker build -t my_notes_app .' 
                 }
+            }
+        }
+        stage("Push to dockerhub"){
+            steps{
+                echo "Pushing to dockerhub"
+                sh "docker login"
             }
         }
     }
