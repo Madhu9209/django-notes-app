@@ -23,11 +23,11 @@ pipeline {
             steps {
                 echo "Pushing to dockerhub"
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubpass", usernameVariable: "dockerHubUser")]) {
-                    sh "docker tag my_notes_app ${env.dockerHubUser}/my_notes_app:latest"
-                    sh '''
+                    sh """
+                    docker tag my_notes_app ${env.dockerHubUser}/my_notes_app:latest
                     echo ${env.dockerHubpass} | docker login -u ${env.dockerHubUser} --password-stdin
-                    '''
-                    sh "docker push ${env.dockerHubUser}/my_notes_app:latest"
+                    docker push ${env.dockerHubUser}/my_notes_app:latest
+                    """
                 }
             }
         }
