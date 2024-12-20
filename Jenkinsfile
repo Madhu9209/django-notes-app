@@ -40,7 +40,7 @@ pipeline {
                 echo "Using Docker image: ${env.dockerHubUser}/my_notes_app:latest"
                 docker stop my_notes_app || true
                 docker rm my_notes_app || true 
-                docker run -d --name my_notes_app -p 8000:8000 ${env.dockerHubUser}/my_notes_app:latest
+                docker run -d --name my_notes_app -p 8003:8003 ${env.dockerHubUser}/my_notes_app:latest
                 """
             }
         }
