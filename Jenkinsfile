@@ -1,13 +1,14 @@
-pipeline{
+pipeline {
     agent any
     
-    stages{
-        stage("Clone code"){
-            steps{
+    stages {
+        stage("Clone code") {
+            steps {
                 echo "Cloning the code"
-                git url:"https://github.com/Madhu9209/django-notes-app.git", branch: "main"
+                git url: "https://github.com/Madhu9209/django-notes-app.git", branch: "main"
             }
         }
+
         stage('Build') {
             steps {
                 echo "Building the Docker image"
@@ -22,11 +23,11 @@ pipeline{
             steps {
                 echo "Pushing to dockerhub"
                 withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubpass", usernameVariable: "dockerHubUser")]) {
-                    sh "docker tag my_notes_app ${dockerHubUser}/my_notes_app:latest"
+                    sh "docker tag my_notes_app ${env.dockerHubUser}/my_notes_app:latest"
                     sh '''
-                    echo ${dockerHubpass} | docker login -u ${dockerHubUser} --password-stdin
+                    echo ${env.dockerHubpass} | docker login -u ${env.dockerHubUser} --password-stdin
                     '''
-                    sh "docker push ${dockerHubUser}/my_notes_app:latest"
+                    sh "docker push ${env.dockerHubUser}/my_notes_app:latest"
                 }
             }
         }
@@ -35,10 +36,10 @@ pipeline{
             steps {
                 echo "Deploy the container"
                 sh """
-                echo "Using Docker image: ${dockerHubUser}/my_notes_app:latest"
+                echo "Using Docker image: ${env.dockerHubUser}/my_notes_app:latest"
                 docker stop my_notes_app || true
                 docker rm my_notes_app || true 
-                docker run -d --name my_notes_app -p 8000:8000 ${dockerHubUser}/my_notes_app:latest
+                docker run -d --name my_notes_app -p 8000:8000 ${env.dockerHubUser}/my_notes_app:latest
                 """
             }
         }
