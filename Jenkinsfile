@@ -13,8 +13,8 @@ pipeline {
             steps {
                 echo "Building the Docker image"
                 script {
-                    sh 'docker --version' 
-                    sh 'docker build -t my_notes_app .' 
+                    sh 'docker --version'
+                    sh 'docker build -t my_notes_app .'
                 }
             }
         }
@@ -36,10 +36,12 @@ pipeline {
         stage("Deploy") {
             steps {
                 echo "Deploy the container"
+                // Debugging to see the value of dockerHubUser
+                echo "DockerHub user is: ${env.dockerHubUser}"  // For debugging
                 sh """
                 echo "Using Docker image: ${env.dockerHubUser}/my_notes_app:latest"
                 docker stop my_notes_app || true
-                docker rm my_notes_app || true 
+                docker rm my_notes_app || true
                 docker run -d --name my_notes_app -p 8003:8003 ${env.dockerHubUser}/my_notes_app:latest
                 """
             }
