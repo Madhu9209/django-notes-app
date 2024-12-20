@@ -29,5 +29,13 @@ pipeline{
                 }
             }
         }
+        stage("Deploy"){
+            steps{
+                echo "Deploy the container"
+                sh ''' docker stop my_notes_app || true
+                docker rm my_notes_app || true 
+                docker run -d --name my_notes_app -p 8000:8000 ${dockerHubUser}/my_notes_app:latest'''
+            }
+        }
     }
 }
