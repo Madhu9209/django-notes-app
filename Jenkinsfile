@@ -53,7 +53,7 @@ pipeline {
                     sh "docker rm my_notes_app || true"
                     
                     // Run the new container with the correct image reference
-                    sh "docker run -d --name my_notes_app -p 8003:8003 ${imageName}"
+                    sh "docker run -d --name my_notes_app -p 8000:8000 ${imageName}"
                 }
             }
         }
